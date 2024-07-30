@@ -1,0 +1,146 @@
+[
+  {
+    "_id": {
+      "$oid": "669ea4a74863b8f48b6f83d1"
+    },
+    "name": "Nike Air Jordan 1 Low Top “Royal Toe” ",
+    "brand": "Nike",
+    "photos": [
+      "6a08eab2feb0629fc6a5166adaf090db.jpg",
+      "54d174913bbace69cbe87c6e18717cc2.jpg",
+      "cd9aacdc42a1122ce5bcc194bdfb3656.jpg",
+      "e8b719d4ae6fdf471d8fc38530d75505.jpg"
+    ],
+    "description": "The Air Jordan 1 Low \"Royal Toe\" draws inspiration from two of its predecessors, the Jordan 1 \"Black Toe\" and \"Royal\". Its design features a Royal Blue leather toe box that contrasts beautifully with the black leather on the toe cap, forefoot, and eyelets. The mid-panel is crafted from white leather, while a Royal Blue leather Swoosh adorns each side. Additionally, the sneaker boasts classic Wings branding embroidered on the heel and a Jumpman logo on the tongue.",
+    "price": 2500,
+    "type": "sneakers",
+    "tags": ["basketball-shoes", "casual-shoes"],
+    "size": 8.5,
+    "color1": "#050914",
+    "color2": "#3864d1",
+    "status": true,
+    "date": {
+      "$date": "2024-07-22T18:27:06.325Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669ea5314863b8f48b6f83d5"
+    },
+    "name": "Nike Zoom 2K",
+    "brand": "Nike",
+    "photos": [
+      "58557db29482715cf7a19af714409f85.jpg",
+      "3ed8151e6eb57fcc325ca02dd7730111.jpg",
+      "9bcb804e4074aace5f50cde7d390b5c4.jpg"
+    ],
+    "description": "The Air Jordan 1 Low \"Royal Toe\" draws inspiration from two of its predecessors, the Jordan 1 \"Black Toe\" and \"Royal\". Its design features a Royal Blue leather toe box that contrasts beautifully with the black leather on the toe cap, forefoot, and eyelets. The mid-panel is crafted from white leather, while a Royal Blue leather Swoosh adorns each side. Additionally, the sneaker boasts classic Wings branding embroidered on the heel and a Jumpman logo on the tongue.",
+    "price": 1500,
+    "type": "sneakers",
+    "tags": ["running-shoes", "high-top"],
+    "size": 9.5,
+    "color1": "#cdddec",
+    "color2": "#090c11",
+    "status": true,
+    "date": {
+      "$date": "2024-07-22T18:27:56.164Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669ea84d4863b8f48b6f83dd"
+    },
+    "name": "Nike Flight Legacy White",
+    "brand": "Nike",
+    "photos": [
+      "9175aad7adaa472a07e71b8f5f86bc69.jpg",
+      "bfc83d445f1cc21636de06ee98f81859.jpg"
+    ],
+    "description": "Nike Flight Legacy White desc",
+    "price": 1900,
+    "type": "sneakers",
+    "tags": ["running-shoes", "casual-shoes", "basketball-shoes", "high-top"],
+    "size": 8.5,
+    "color1": "#8a1d34",
+    "color2": "#b3cee3",
+    "status": true,
+    "date": {
+      "$date": "2024-07-22T18:42:26.174Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669ea8a14863b8f48b6f83e1"
+    },
+    "name": "Air Jordan 1 Retro High SB ‘NYC to Paris’",
+    "brand": "Nike",
+    "photos": [
+      "47763cbfec65567ad31bd190d05d7190.jpg",
+      "aac92fc39439fe3d0f27e2acfbb97707.jpg"
+    ],
+    "description": "Air Jordan 1 Retro High SB ‘NYC to Paris’ desc",
+    "price": 1299,
+    "type": "sneakers",
+    "tags": ["basketball-shoes", "casual-shoes", "running-shoes", "high-top"],
+    "size": 8,
+    "color1": "#d1e3e7",
+    "color2": "#101720",
+    "status": true,
+    "date": {
+      "$date": "2024-07-22T18:43:37.695Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669ea9324863b8f48b6f83ed"
+    },
+    "name": "Jordan 1 Retro High Phantom Gym Red",
+    "brand": "Nike",
+    "photos": [
+      "0f74b1075ea49e6dcf090375dd41ec23.jpg",
+      "957cb01a0e7aa6237fd7486c97bf7dbc.jpg",
+      "e8c03463e27537274758beafc09e3e59.jpg",
+      "abe972c33f1f26b2626411dad143fb2a.jpg"
+    ],
+    "description": "Jordan 1 Retro High\nPhantom Gym Red desc",
+    "price": 2499,
+    "type": "sneakers",
+    "tags": ["basketball-shoes", "high-top", "casual-shoes"],
+    "size": 9,
+    "color1": "#ebeff2",
+    "color2": "#ca254a",
+    "status": true,
+    "date": {
+      "$date": "2024-07-22T18:45:16.511Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669fd4b014aa6835e4d654d4"
+    },
+    "name": "Nike Blazer Mid ‘77 Vintage “Have a Good Game”",
+    "brand": "Nike",
+    "photos": [
+      "77192a884018c529f726895d297982ab.jpg",
+      "bcb2030cdf610836d8923865a5516850.jpg",
+      "9f8234315308e2c93d17160959c2e94d.jpg"
+    ],
+    "description": "Nike Blazer Mid ‘77 Vintage\n“Have a Good Game” desc",
+    "price": 2000,
+    "type": "rubberShoes",
+    "tags": ["basketball-shoes", "casual-shoes", "running-shoes", "high-top"],
+    "size": 10,
+    "color1": "#d6effc",
+    "color2": "#0a0c19",
+    "status": true,
+    "date": {
+      "$date": "2024-07-23T16:03:10.079Z"
+    },
+    "__v": 0
+  }
+]
