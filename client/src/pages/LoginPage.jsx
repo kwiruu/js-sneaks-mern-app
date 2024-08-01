@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../UserContext';
@@ -93,16 +93,6 @@ export default function LoginPage() {
             </button>
           </div>
         </form>
-
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?{' '}
-          <Link
-            to={'/register'}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            Register now
-          </Link>
-        </p>
       </div>
     </div>
   );

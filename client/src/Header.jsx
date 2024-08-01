@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="border-b border-gray-400 p-4 pt-2 flex justify-between items-center text-sm relative z-10">
       {/* Left Menu for Desktop */}
-      <div className="hidden md:flex items-center gap-10">
+      <div className="hidden md:flex items-center gap-10 flex-1">
         <Link to={'/'} className="font-medium flex items-center">
           Home
         </Link>
@@ -20,15 +20,12 @@ export default function Header() {
       </div>
 
       {/* Logo */}
-      <Link to={'/'} className="flex items-center gap-1 font-bold text-xl">
+      <Link to={'/'} className="flex items-center gap-1 font-bold text-xl flex-shrink-0">
         <img style={{ width: '100px', height: 'auto' }} src={logo} alt="js-logo" />
       </Link>
 
       {/* Right Menu for Desktop */}
-      <div className="hidden md:flex items-center gap-10">
-        <Link to={'/search'} className="font-medium flex items-center">
-          Search
-        </Link>
+      <div className="hidden md:flex items-center gap-10 flex-1 justify-end">
         <Link to={user ? '/account' : '/login'} className="flex items-center gap-1">
           {!user && <p className="font-medium">Login</p>}
           {!!user && <div className="font-medium">{user.name.split(' ')[0]}</div>}
@@ -68,9 +65,6 @@ export default function Header() {
         </Link>
         <Link to={'/about'} className="block py-2 font-medium">
           Contact Us
-        </Link>
-        <Link to={'/search'} className="block py-2 font-medium">
-          Search
         </Link>
         <Link to={user ? '/account' : '/login'} className="block py-2 font-medium">
           {!user ? 'Login' : user.name.split(' ')[0]}

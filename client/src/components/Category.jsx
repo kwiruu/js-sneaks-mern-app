@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
 import ShoeCard from '../components/ShoeCard';
 
 import {
@@ -30,15 +29,16 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ];
+
 const subCategories = [
-  { name: 'Sneaks', href: '#' },
-  { name: 'Loafers', href: '#' },
-  { name: 'Rubber Shoes', href: '#' },
-  { name: 'Sandals', href: '#' },
-  { name: 'Sneakers', href: '#' },
-  { name: 'Boots', href: '#' },
-  { name: 'Casual Shoes', href: '#' },
+  { name: 'All', value: '' },
+  { name: 'Sneakers', value: 'sneakers' },
+  { name: 'Loafers', value: 'loafers' },
+  { name: 'Rubber Shoes', value: 'rubber-shoes' },
+  { name: 'Sandals', value: 'sandals' },
+  { name: 'Boots', value: 'boots' },
 ];
+
 const filters = [
   {
     id: 'category',
@@ -58,12 +58,22 @@ const filters = [
     id: 'size',
     name: 'Size',
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
+      { value: '8', label: '8', checked: false },
+      { value: '8.5', label: '8.5', checked: false },
+      { value: '9', label: '9', checked: false },
+      { value: '9.5', label: '9.5', checked: false },
+      { value: '10', label: '10', checked: false },
+      { value: '10.5', label: '10.5', checked: false },
+      { value: '11', label: '11', checked: false },
+      { value: '11.5', label: '11.5', checked: false },
+      { value: '12', label: '12', checked: false },
+      { value: '12.5', label: '12.5', checked: false },
+      { value: '13', label: '13', checked: false },
+      { value: '13.5', label: '13.5', checked: false },
+      { value: '14', label: '14', checked: false },
+      { value: '14.5', label: '14.5', checked: false },
+      { value: '15', label: '15', checked: false },
+      { value: '15.5', label: '15.5', checked: false },
     ],
   },
 ];
@@ -75,12 +85,53 @@ function classNames(...classes) {
 export default function Category() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [shoes, setShoes] = useState([]);
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+
+  const [query] = useState('');
 
   useEffect(() => {
     axios.get('/shoes').then((response) => {
       setShoes(response.data);
     });
   }, []);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const category = e.target.name;
+
+    if (category === 'size') {
+      setSelectedSizes((prev) =>
+        prev.includes(value) ? prev.filter((size) => size !== value) : [...prev, value]
+      );
+    } else {
+      setSelectedTags((prev) =>
+        prev.includes(value) ? prev.filter((tag) => tag !== value) : [...prev, value]
+      );
+    }
+  };
+
+  const handleClick = (e) => {
+    setSelectedType(e.target.value);
+  };
+
+  const filteredShoes = shoes.filter((shoe) => {
+    const matchesQuery = shoe.name.toLowerCase().includes(query.toLowerCase());
+    const matchesType = selectedType
+      ? shoe.type === selectedType ||
+        shoe.tags.includes(selectedType) ||
+        shoe.size === selectedType ||
+        shoe.name.includes(selectedType) ||
+        shoe.brand.includes(selectedType)
+      : true;
+    const matchesTags =
+      selectedTags.length > 0 ? selectedTags.every((tag) => shoe.tags.includes(tag)) : true;
+    const matchesSizes =
+      selectedSizes.length > 0 ? selectedSizes.includes(shoe.size.toString()) : true;
+
+    return matchesQuery && matchesType && matchesTags && matchesSizes;
+  });
 
   const gridStyle = {
     display: 'grid',
@@ -131,9 +182,16 @@ export default function Category() {
                 <ul role="list" className="px-2 py-3 font-medium text-gray-900">
                   {subCategories.map((category) => (
                     <li key={category.name}>
-                      <a href={category.href} className="block px-2 py-3">
+                      <label>
+                        <input
+                          onClick={handleClick}
+                          value={category.value}
+                          type="radio"
+                          name="category"
+                          className="m-4"
+                        />
                         {category.name}
-                      </a>
+                      </label>
                     </li>
                   ))}
                 </ul>
@@ -161,22 +219,20 @@ export default function Category() {
                     </h3>
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-6">
-                        {section.options.map((option, optionIdx) => (
+                        {section.options.map((option) => (
                           <div key={option.value} className="flex items-center">
                             <input
-                              defaultValue={option.value}
-                              defaultChecked={option.checked}
-                              id={`filter-mobile-${section.id}-${optionIdx}`}
-                              name={`${section.id}[]`}
+                              value={option.value}
+                              checked={
+                                selectedTags.includes(option.value) ||
+                                selectedSizes.includes(option.value)
+                              }
                               type="checkbox"
+                              onChange={handleChange}
+                              name={section.id === 'size' ? 'size' : 'tag'}
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
-                            <label
-                              htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                              className="ml-3 min-w-0 flex-1 text-gray-500"
-                            >
-                              {option.label}
-                            </label>
+                            <label className="ml-3 text-sm text-gray-600">{option.label}</label>
                           </div>
                         ))}
                       </div>
@@ -259,15 +315,28 @@ export default function Category() {
                 >
                   {subCategories.map((category) => (
                     <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
+                      <label>
+                        <input
+                          onClick={handleClick}
+                          value={category.value}
+                          type="radio"
+                          name="category"
+                          className="mx-3"
+                        />
+                        {category.name}
+                      </label>
                     </li>
                   ))}
                 </ul>
 
                 {filters.map((section) => (
-                  <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
-                    <h3 className="-my-3 flow-root">
-                      <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                  <Disclosure
+                    key={section.id}
+                    as="div"
+                    className="border-t border-gray-200 px-4 py-6"
+                  >
+                    <h3 className="-mx-2 -my-3 flow-root">
+                      <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
                         <span className="font-medium text-gray-900">{section.name}</span>
                         <span className="ml-6 flex items-center">
                           <PlusIcon
@@ -282,23 +351,21 @@ export default function Category() {
                       </DisclosureButton>
                     </h3>
                     <DisclosurePanel className="pt-6">
-                      <div className="space-y-4">
-                        {section.options.map((option, optionIdx) => (
+                      <div className="space-y-6">
+                        {section.options.map((option) => (
                           <div key={option.value} className="flex items-center">
                             <input
-                              defaultValue={option.value}
-                              defaultChecked={option.checked}
-                              id={`filter-${section.id}-${optionIdx}`}
-                              name={`${section.id}[]`}
+                              value={option.value}
+                              checked={
+                                selectedTags.includes(option.value) ||
+                                selectedSizes.includes(option.value)
+                              }
                               type="checkbox"
+                              onChange={handleChange}
+                              name={section.id === 'size' ? 'size' : 'tag'}
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
-                            <label
-                              htmlFor={`filter-${section.id}-${optionIdx}`}
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              {option.label}
-                            </label>
+                            <label className="ml-3 text-sm text-gray-600">{option.label}</label>
                           </div>
                         ))}
                       </div>
@@ -313,8 +380,8 @@ export default function Category() {
                   style={window.innerWidth < 640 ? smallScreenStyle : gridStyle}
                   className="w-full"
                 >
-                  {shoes.length > 0 &&
-                    shoes.map((shoe) => (
+                  {filteredShoes.length > 0 &&
+                    filteredShoes.map((shoe) => (
                       <ShoeCard key={shoe._id} shoe={shoe} toString={'/shoe/'} />
                     ))}
                 </div>

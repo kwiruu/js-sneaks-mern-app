@@ -18,14 +18,9 @@ export default function AboutPage() {
     <>
       <section>
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-          <div className="relative">
-            {/* Image Container */}
-            <div className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full z-0">
-              <img
-                alt="About us"
-                src={aboutimg}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+            <div className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full">
+              <img alt="" src={aboutimg} className="absolute inset-0 h-full w-full object-cover" />
             </div>
 
             <div className="lg:py-24">
