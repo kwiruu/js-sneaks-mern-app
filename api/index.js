@@ -28,7 +28,6 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.MONGO_URL);
 
 async function uploadToS3(filePath, originalFileName, mimetype) {
   console.log("Access Key:", process.env.S3_ACCESS_KEY);
@@ -60,10 +59,12 @@ async function uploadToS3(filePath, originalFileName, mimetype) {
 }
 
 app.get("/test", (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   res.json("test ok");
 });
 
 app.post("/login", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const { email, password } = req.body;
 
   const userDoc = await User.findOne({ email });
@@ -94,6 +95,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -112,6 +114,7 @@ app.post("/logout", (req, res) => {
 
 const photosMiddleware = multer({ dest: "/tmp" });
 app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const uploadedFiles = [];
 
   if (!req.files || req.files.length === 0) {
@@ -163,15 +166,18 @@ app.post("/shoes", (req, res) => {
 });
 
 app.get("/shoes", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   res.json(await Shoes.find({}));
 });
 
 app.get("/shoes/:id", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const { id } = req.params;
   res.json(await Shoes.findById(id));
 });
 
 app.put("/shoes", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const {
     id,
     name,
@@ -209,6 +215,7 @@ app.put("/shoes", async (req, res) => {
 });
 
 app.use((req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
   res.status(404).json("Not found");
 });
 
