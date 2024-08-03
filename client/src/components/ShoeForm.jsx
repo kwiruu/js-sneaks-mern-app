@@ -87,7 +87,7 @@ export default function ShoeForm() {
 
   return (
     <>
-      <form onSubmit={saveNewShoe} className="pt-10">
+      <form onSubmit={saveNewShoe} className="p-4 pt-10">
         <div className="space-y-12 md:pl-44 md:pr-44 pl-5 pr-5">
           <ShoeDetails
             name={name}

@@ -21,7 +21,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="pt-10">
+    <div className="p-5 pt-10">
       <ProfileComponent user={user} />
       <ShoesList />
     </div>
