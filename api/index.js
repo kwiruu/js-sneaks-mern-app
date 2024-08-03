@@ -58,12 +58,12 @@ async function uploadToS3(filePath, originalFileName, mimetype) {
   return `https://${bucketName}.s3.amazonaws.com/${newFilename}`;
 }
 
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.json("test ok");
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { email, password } = req.body;
 
@@ -94,7 +94,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
   if (token) {
@@ -108,12 +108,12 @@ app.get("/profile", (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   res.clearCookie("token").json(true);
 });
 
 const photosMiddleware = multer({ dest: "/tmp" });
-app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
+app.post("/api/upload", photosMiddleware.array("photos", 100), async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const uploadedFiles = [];
 
@@ -130,7 +130,7 @@ app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.post("/shoes", (req, res) => {
+app.post("/api/shoes", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
 
   const {
@@ -165,18 +165,18 @@ app.post("/shoes", (req, res) => {
   res.json(shoeDoc);
 });
 
-app.get("/shoes", async (req, res) => {
+app.get("/api/shoes", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.json(await Shoes.find({}));
 });
 
-app.get("/shoes/:id", async (req, res) => {
+app.get("/api/shoes/:id", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { id } = req.params;
   res.json(await Shoes.findById(id));
 });
 
-app.put("/shoes", async (req, res) => {
+app.put("/api/shoes", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {
     id,
