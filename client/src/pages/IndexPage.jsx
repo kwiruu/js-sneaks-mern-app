@@ -22,7 +22,7 @@ export default function IndexPage() {
   return (
     <>
       <div className="sm:px-4 mx-3 lg:px-20 sm:mx-10">
-        <div className="my-8 mx-3 flex overflow-x-auto sm:flex sm:overflow-x-auto space-x-4 sm:space-x-10 hide-scrollbar">
+        <div className="my-8 mx-3 flex overflow-x-auto sm:flex sm:overflow-x-auto space-x-4 pt-10 sm:space-x-10 hide-scrollbar">
           {logos.map((logo, index) => (
             <div
               key={index}

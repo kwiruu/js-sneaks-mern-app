@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import Types from '../components/Types';
 import Tags from '../components/Tags';
 import ImageUpload from '../components/ImageUpload';
 import ShoeDetails from '../components/ShoeDetails';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+
 export default function ShoeForm() {
   const { id } = useParams();
 
@@ -45,6 +45,10 @@ export default function ShoeForm() {
 
   const handleBrandChange = (event) => {
     setBrand(event.target.value);
+  };
+
+  const handleStatusChange = () => {
+    setStatus((prevStatus) => !prevStatus);
   };
 
   async function saveNewShoe(event) {
@@ -127,6 +131,8 @@ export default function ShoeForm() {
                     <option value="New Balance">New Balance</option>
                     <option value="Brooks">Brooks</option>
                     <option value="Marc O'Polo">Marc O&apos;Polo</option>
+                    <option value="Loro Piana">Loro Piana</option>
+                    <option value="Others">Others</option>
                   </select>
                 </div>
               </div>
@@ -201,6 +207,25 @@ export default function ShoeForm() {
                   <span className="ml-4 text-sm font-medium leading-6 text-gray-900">{color2}</span>
                 </div>
               </div>
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Status
+                </label>
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={handleStatusChange}
+                    className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                      status ? 'bg-green-600 text-white' : 'bg-gray-600 text-white'
+                    }`}
+                  >
+                    {status ? 'Available' : 'Sold'}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div className="border-b border-gray-900/10 pb-12">
@@ -229,3 +254,4 @@ export default function ShoeForm() {
     </>
   );
 }
+  

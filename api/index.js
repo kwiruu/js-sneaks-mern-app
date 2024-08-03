@@ -1,19 +1,21 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
-require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("./models/User.js");
 const app = express();
 const CookieParser = require("cookie-parser");
-const multer = require("multer");
 const fs = require("fs");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const path = require("path");
 const Shoes = require("./models/Shoes.js");
-
+const multer = require("multer");
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "whatisthesoundofthedog";
+
+const bucketName = process.env.S3_BUCKET_NAME;
 
 app.use(express.json());
 app.use(CookieParser());
@@ -26,13 +28,40 @@ app.use(
   })
 );
 
-console.log(process.env.MONGO_URL);
 mongoose.connect(process.env.MONGO_URL);
+
+async function uploadToS3(filePath, originalFileName, mimetype) {
+  console.log("Access Key:", process.env.S3_ACCESS_KEY);
+  console.log("Secret Key:", process.env.S3_SECRET_ACCESS_KEY);
+  console.log("Bucket Name:", process.env.S3_BUCKET_NAME);
+
+  const client = new S3Client({
+    region: "ap-southeast-2",
+    credentials: {
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    },
+  });
+
+  const parts = originalFileName.split(".");
+  const ext = parts[parts.length - 1];
+  const newFilename = `${Date.now()}.${ext}`;
+
+  const data = await client.send(
+    new PutObjectCommand({
+      Bucket: bucketName,
+      Key: newFilename,
+      Body: fs.readFileSync(filePath),
+      ContentType: mimetype,
+      ACL: "public-read",
+    })
+  );
+  return `https://${bucketName}.s3.amazonaws.com/${newFilename}`;
+}
 
 app.get("/test", (req, res) => {
   res.json("test ok");
 });
-
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -48,14 +77,12 @@ app.post("/login", async (req, res) => {
         {},
         (err, token) => {
           if (err) {
-            // Handle error appropriately
             res.status(500).json("Error generating token");
-            return; // Ensure no further execution in case of error
+            return;
           }
           res
             .cookie("token", token, { httpOnly: true, path: "/" })
             .json(userDoc);
-          // Removed the second res.cookie call to prevent overriding the first one
         }
       );
     } else {
@@ -83,9 +110,8 @@ app.post("/logout", (req, res) => {
   res.clearCookie("token").json(true);
 });
 
-const photosMiddleware = multer({ dest: "uploads/" });
-
-app.post("/upload", photosMiddleware.array("photos", 20), (req, res) => {
+const photosMiddleware = multer({ dest: "/tmp" });
+app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
   const uploadedFiles = [];
 
   if (!req.files || req.files.length === 0) {
@@ -93,24 +119,9 @@ app.post("/upload", photosMiddleware.array("photos", 20), (req, res) => {
   }
 
   for (let i = 0; i < req.files.length; i++) {
-    const { path: filePath, originalname } = req.files[i];
+    const { path, originalname, mimetype } = req.files[i];
 
-    if (!originalname) {
-      return res.status(400).json({ error: "File has no original name." });
-    }
-
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = filePath + "." + ext;
-
-    try {
-      fs.renameSync(filePath, newPath);
-      const fileName = path.basename(newPath);
-      uploadedFiles.push(fileName);
-    } catch (error) {
-      console.error("Error renaming file:", error);
-      return res.status(500).json({ error: "Error processing file." });
-    }
+    uploadedFiles.push(await uploadToS3(path, originalname, mimetype));
   }
 
   res.json(uploadedFiles);
@@ -152,7 +163,7 @@ app.post("/shoes", (req, res) => {
 });
 
 app.get("/shoes", async (req, res) => {
-  res.json(await Shoes.find({ status: true }));
+  res.json(await Shoes.find({}));
 });
 
 app.get("/shoes/:id", async (req, res) => {

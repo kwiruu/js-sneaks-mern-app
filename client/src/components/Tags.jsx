@@ -136,12 +136,41 @@ export default function Tags({ selected, onChange }) {
             Low Top
           </label>
         </div>
+        <div className="flex items-center gap-x-3">
+          <input
+            id="formal-shoes"
+            checked={selected.includes('formal-shoes')}
+            name="formal-shoes"
+            type="checkbox"
+            onChange={handleCbClick}
+            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+          />
+          <label
+            htmlFor="formal-shoes"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Formal Shoes
+          </label>
+        </div>
+        <div className="flex items-center gap-x-3">
+          <input
+            id="other"
+            checked={selected.includes('other')}
+            name="other"
+            type="checkbox"
+            onChange={handleCbClick}
+            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+          />
+          <label htmlFor="other" className="block text-sm font-medium leading-6 text-gray-900">
+            Others
+          </label>
+        </div>
       </div>
     </fieldset>
   );
 }
 
 Tags.propTypes = {
-    selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onChange: PropTypes.func.isRequired,
-  };
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func.isRequired,
+};

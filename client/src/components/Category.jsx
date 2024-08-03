@@ -26,12 +26,15 @@ import {
 
 const sortOptions = [
   { name: 'Newest', href: '#', current: false },
+  { name: 'Oldest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ];
 
 const subCategories = [
   { name: 'All', value: '' },
+  { name: 'Available', value: 'true' },
+  { name: 'Sold', value: 'false' },
   { name: 'Sneakers', value: 'sneakers' },
   { name: 'Loafers', value: 'loafers' },
   { name: 'Rubber Shoes', value: 'rubber-shoes' },
@@ -47,6 +50,7 @@ const filters = [
       { value: 'basketball-shoes', label: 'Basketball Shoes', checked: false },
       { value: 'casual-shoes', label: 'Casual Shoes', checked: false },
       { value: 'hiking-shoes', label: 'Hiking Shoes', checked: false },
+      { value: 'formal-shoes', label: 'Formal Shoes', checked: false },
       { value: 'running-shoes', label: 'Running Shoes', checked: false },
       { value: 'tennis-shoes', label: 'Tennis Shoes', checked: false },
       { value: 'low-top', label: 'Low Top', checked: false },
@@ -58,6 +62,8 @@ const filters = [
     id: 'size',
     name: 'Size',
     options: [
+      { value: '7', label: '7', checked: false },
+      { value: '7.5', label: '7.5', checked: false },
       { value: '8', label: '8', checked: false },
       { value: '8.5', label: '8.5', checked: false },
       { value: '9', label: '9', checked: false },
@@ -76,6 +82,26 @@ const filters = [
       { value: '15.5', label: '15.5', checked: false },
     ],
   },
+  {
+    id: 'brand',
+    name: 'Brand',
+    options: [
+      { value: 'Nike', label: 'Nike', checked: false },
+      { value: 'Converse', label: 'Converse', checked: false },
+      { value: "Marc O'Polo", label: "Marc O'Polo", checked: false },
+      { value: 'Adidas', label: 'Adidas', checked: false },
+      { value: 'Reebok', label: 'Reebok', checked: false },
+      { value: 'Puma', label: 'Puma', checked: false },
+      { value: 'Fila', label: 'Fila', checked: false },
+      { value: 'Under Armour', label: 'Under Armour', checked: false },
+      { value: 'Asics', label: 'Asics', checked: false },
+      { value: 'New Balance', label: 'New Balance', checked: false },
+      { value: 'Brooks', label: 'Brooks', checked: false },
+      { value: 'Vans', label: 'Vans', checked: false },
+      { value: 'Loro Piana', label: 'Loro Piana', checked: false },
+      { value: 'Others', label: 'Others', checked: false },
+    ],
+  },
 ];
 
 function classNames(...classes) {
@@ -85,9 +111,12 @@ function classNames(...classes) {
 export default function Category() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [shoes, setShoes] = useState([]);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedType, setSelectedType] = useState('true');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+
+  const [sortOption, setSortOption] = useState('');
 
   const [query] = useState('');
 
@@ -105,6 +134,10 @@ export default function Category() {
       setSelectedSizes((prev) =>
         prev.includes(value) ? prev.filter((size) => size !== value) : [...prev, value]
       );
+    } else if (category === 'brand') {
+      setSelectedBrands((prev) =>
+        prev.includes(value) ? prev.filter((brand) => brand !== value) : [...prev, value]
+      );
     } else {
       setSelectedTags((prev) =>
         prev.includes(value) ? prev.filter((tag) => tag !== value) : [...prev, value]
@@ -118,19 +151,43 @@ export default function Category() {
 
   const filteredShoes = shoes.filter((shoe) => {
     const matchesQuery = shoe.name.toLowerCase().includes(query.toLowerCase());
-    const matchesType = selectedType
-      ? shoe.type === selectedType ||
-        shoe.tags.includes(selectedType) ||
-        shoe.size === selectedType ||
-        shoe.name.includes(selectedType) ||
-        shoe.brand.includes(selectedType)
-      : true;
+
+    // Handle "Available" and "Sold" options
+    const matchesType =
+      selectedType === 'true'
+        ? shoe.status === true
+        : selectedType === 'false'
+          ? shoe.status === false
+          : selectedType
+            ? shoe.type === selectedType ||
+              shoe.tags.includes(selectedType) ||
+              shoe.size === selectedType ||
+              shoe.name.includes(selectedType) ||
+              shoe.brand.includes(selectedType)
+            : true;
+
     const matchesTags =
       selectedTags.length > 0 ? selectedTags.every((tag) => shoe.tags.includes(tag)) : true;
     const matchesSizes =
       selectedSizes.length > 0 ? selectedSizes.includes(shoe.size.toString()) : true;
+    const matchesBrands = selectedBrands.length > 0 ? selectedBrands.includes(shoe.brand) : true;
 
-    return matchesQuery && matchesType && matchesTags && matchesSizes;
+    return matchesQuery && matchesType && matchesTags && matchesSizes && matchesBrands;
+  });
+
+  const sortedShoes = filteredShoes.sort((a, b) => {
+    switch (sortOption) {
+      case 'Newest':
+        return new Date(b.date) - new Date(a.date);
+      case 'Oldest':
+        return new Date(a.date) - new Date(b.date);
+      case 'Price: Low to High':
+        return a.price - b.price;
+      case 'Price: High to Low':
+        return b.price - a.price;
+      default:
+        return 0;
+    }
   });
 
   const gridStyle = {
@@ -189,6 +246,7 @@ export default function Category() {
                           type="radio"
                           name="category"
                           className="m-4"
+                          defaultChecked={category.value === 'true'} // Set "Available" as default
                         />
                         {category.name}
                       </label>
@@ -225,11 +283,18 @@ export default function Category() {
                               value={option.value}
                               checked={
                                 selectedTags.includes(option.value) ||
-                                selectedSizes.includes(option.value)
+                                selectedSizes.includes(option.value) ||
+                                selectedBrands.includes(option.value)
                               }
                               type="checkbox"
                               onChange={handleChange}
-                              name={section.id === 'size' ? 'size' : 'tag'}
+                              name={
+                                section.id === 'size'
+                                  ? 'size'
+                                  : section.id === 'brand'
+                                    ? 'brand'
+                                    : 'tag'
+                              }
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label className="ml-3 text-sm text-gray-600">{option.label}</label>
@@ -267,15 +332,15 @@ export default function Category() {
                   <div className="py-1">
                     {sortOptions.map((option) => (
                       <MenuItem key={option.name}>
-                        <a
-                          href={option.href}
+                        <button
+                          onClick={() => setSortOption(option.name)}
                           className={classNames(
                             option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                             'block px-4 py-2 text-sm data-[focus]:bg-gray-100'
                           )}
                         >
                           {option.name}
-                        </a>
+                        </button>
                       </MenuItem>
                     ))}
                   </div>
@@ -358,11 +423,18 @@ export default function Category() {
                               value={option.value}
                               checked={
                                 selectedTags.includes(option.value) ||
-                                selectedSizes.includes(option.value)
+                                selectedSizes.includes(option.value) ||
+                                selectedBrands.includes(option.value)
                               }
                               type="checkbox"
                               onChange={handleChange}
-                              name={section.id === 'size' ? 'size' : 'tag'}
+                              name={
+                                section.id === 'size'
+                                  ? 'size'
+                                  : section.id === 'brand'
+                                    ? 'brand'
+                                    : 'tag'
+                              }
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label className="ml-3 text-sm text-gray-600">{option.label}</label>
@@ -375,13 +447,13 @@ export default function Category() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">
+              <div className="col-span-2 lg:col-span-3">
                 <div
                   style={window.innerWidth < 640 ? smallScreenStyle : gridStyle}
                   className="w-full"
                 >
-                  {filteredShoes.length > 0 &&
-                    filteredShoes.map((shoe) => (
+                  {sortedShoes.length > 0 &&
+                    sortedShoes.map((shoe) => (
                       <ShoeCard key={shoe._id} shoe={shoe} toString={'/shoe/'} />
                     ))}
                 </div>

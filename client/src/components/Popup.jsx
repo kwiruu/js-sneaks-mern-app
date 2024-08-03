@@ -13,7 +13,10 @@ export default function Popup() {
   return (
     isVisible && (
       <div
-        className={`fixed bottom-0 left-0 right-0 isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 ${isExiting ? 'popup-exit' : 'popup-enter'}`}
+        className={`fixed bottom-0 left-0 right-0 isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 ${
+          isExiting ? 'popup-exit' : 'popup-enter'
+        }`}
+        style={{ zIndex: 1000 }} // Set a high z-index value
       >
         <div
           aria-hidden="true"

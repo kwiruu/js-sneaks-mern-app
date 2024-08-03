@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loading from '../components/Loading';
 import Marquee from '../components/Marquee';
 import { Link } from 'react-router-dom';
+import Image from '../components/Image';
 
 export default function ShoePage() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ export default function ShoePage() {
           {shoe?.photos?.length > 0 &&
             shoe.photos.map((photo, index) => (
               <Link onClick={() => setShowAllPhotos(false)} key={index}>
-                <img src={'http://localhost:4000/uploads/' + photo} className="mx-auto" />
+                <Image src={photo} className="mx-auto" />
               </Link>
             ))}
         </div>
@@ -39,7 +40,7 @@ export default function ShoePage() {
 
   return (
     <div className="bg-white">
-      <div className="pt-6">
+      <div className="pt-10 p-2 sm:p-0">
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           {/* Left side: Photos */}
           <div className="lg:col-span-2">
@@ -48,11 +49,13 @@ export default function ShoePage() {
                 <Link
                   onClick={() => setShowAllPhotos(true)}
                   key={index}
-                  className={`aspect-w-1 aspect-h-1 overflow-hidden border border-black ${index === 3 && shoe.photos.length === 3 ? 'col-span-2 row-span-2' : ''}`}
+                  className={`aspect-w-1 aspect-h-1 overflow-hidden border border-black ${
+                    index === 3 && shoe.photos.length === 3 ? 'col-span-2 row-span-2' : ''
+                  }`}
                 >
-                  <img
+                  <Image
                     alt={photo.alt}
-                    src={'http://localhost:4000/uploads/' + photo}
+                    src={photo}
                     className="max-w-full max-h-full object-cover object-center"
                   />
                 </Link>
@@ -97,10 +100,14 @@ export default function ShoePage() {
               </div>
 
               <a
-                href="https://www.facebook.com/messages/t/302146342984780"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                href={`${
+                  !shoe.status ? '' : 'https://www.facebook.com/messages/t/302146342984780'
+                }`}
+                className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                  !shoe.status ? 'bg-red-500 hover:bg-red-700' : ''
+                }`}
               >
-                Contact seller
+                {!shoe.status ? 'Sold' : 'Contact Seller'}
               </a>
             </div>
 

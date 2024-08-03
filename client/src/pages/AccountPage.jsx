@@ -9,7 +9,11 @@ export default function AccountPage() {
   const { ready, user } = useContext(UserContext);
 
   if (!ready) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   if (ready && !user) {
@@ -17,7 +21,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div>
+    <div className="pt-10">
       <ProfileComponent user={user} />
       <ShoesList />
     </div>
