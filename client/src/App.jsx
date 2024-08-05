@@ -11,6 +11,7 @@ import ShoeForm from './components/ShoeForm';
 import ShoePage from './pages/ShoePage';
 import NotFoundPage from './pages/NotFoundPage';
 import AboutPage from './pages/AboutPage';
+import SizeGuide from './pages/SizeGuide';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -29,6 +30,7 @@ function App() {
           <Route path="/account/shoes/:id" element={<ShoeForm />} />
           <Route path="/shoe/:id" element={<ShoePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/size-guide" element={<SizeGuide />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

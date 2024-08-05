@@ -40,7 +40,7 @@ export default function ShoePage() {
 
   return (
     <div className="bg-white">
-      <div className="pt-10 p-2 sm:p-0">
+      <div className="mt-16 p-2 sm:p-0">
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           {/* Left side: Photos */}
           <div className="lg:col-span-2">
@@ -80,10 +80,12 @@ export default function ShoePage() {
                   <div
                     className="border border-black rounded-full bg-black h-4 w-4 sm:h-6 sm:w-6"
                     style={{ backgroundColor: shoe.color1 }}
+                    title={shoe.color1}
                   ></div>
                   <div
                     className="border border-black rounded-full bg-black h-4 w-4 sm:h-6 sm:w-6"
                     style={{ backgroundColor: shoe.color2 }}
+                    title={shoe.color2}
                   ></div>
                 </div>
               </div>
@@ -92,9 +94,9 @@ export default function ShoePage() {
               <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                  <Link to={'/size-guide'} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                     Size guide
-                  </a>
+                  </Link>
                 </div>
                 {shoe.size}
               </div>
