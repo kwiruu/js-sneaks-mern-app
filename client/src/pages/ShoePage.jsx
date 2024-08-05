@@ -93,8 +93,13 @@ export default function ShoePage() {
               {/* Sizes */}
               <div className="mt-10">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Size<span className="text-gray-400 text-xs"> (US)</span></h3>
-                  <Link to={'/size-guide'} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Size<span className="text-gray-400 text-xs"> (US)</span>
+                  </h3>
+                  <Link
+                    to={'/size-guide'}
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  >
                     Size guide
                   </Link>
                 </div>
@@ -108,6 +113,7 @@ export default function ShoePage() {
                 className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
                   !shoe.status ? 'bg-red-500 hover:bg-red-700' : ''
                 }`}
+                target="_blank"
               >
                 {!shoe.status ? 'Sold' : 'Contact Seller'}
               </a>
