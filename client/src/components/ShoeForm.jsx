@@ -81,6 +81,17 @@ export default function ShoeForm() {
     }
   }
 
+  async function deleteShoe() {
+    if (id) {
+      try {
+        await axios.delete(`/api/shoes/${id}`);
+        setRedirect('/account');
+      } catch (error) {
+        console.error("Failed to delete shoe:", error);
+      }
+    }
+  }
+
   if (redirect) {
     return <Navigate to={redirect} />;
   }
@@ -243,6 +254,15 @@ export default function ShoeForm() {
           <Link to={'/account'} className="text-sm font-semibold leading-6 text-gray-900">
             Cancel
           </Link>
+          {id && (
+            <button
+              type="button"
+              onClick={deleteShoe}
+              className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+              Delete
+            </button>
+          )}
           <button
             type="submit"
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -254,4 +274,3 @@ export default function ShoeForm() {
     </>
   );
 }
-  

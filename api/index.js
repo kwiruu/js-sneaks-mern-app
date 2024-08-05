@@ -28,7 +28,6 @@ app.use(
   })
 );
 
-
 async function uploadToS3(filePath, originalFileName, mimetype) {
   console.log("Access Key:", process.env.S3_ACCESS_KEY);
   console.log("Secret Key:", process.env.S3_SECRET_ACCESS_KEY);
@@ -113,22 +112,26 @@ app.post("/api/logout", (req, res) => {
 });
 
 const photosMiddleware = multer({ dest: "/tmp" });
-app.post("/api/upload", photosMiddleware.array("photos", 100), async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const uploadedFiles = [];
+app.post(
+  "/api/upload",
+  photosMiddleware.array("photos", 100),
+  async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+    const uploadedFiles = [];
 
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ error: "No files were uploaded." });
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No files were uploaded." });
+    }
+
+    for (let i = 0; i < req.files.length; i++) {
+      const { path, originalname, mimetype } = req.files[i];
+
+      uploadedFiles.push(await uploadToS3(path, originalname, mimetype));
+    }
+
+    res.json(uploadedFiles);
   }
-
-  for (let i = 0; i < req.files.length; i++) {
-    const { path, originalname, mimetype } = req.files[i];
-
-    uploadedFiles.push(await uploadToS3(path, originalname, mimetype));
-  }
-
-  res.json(uploadedFiles);
-});
+);
 
 app.post("/api/shoes", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -217,6 +220,17 @@ app.put("/api/shoes", async (req, res) => {
 app.use((req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.status(404).json("Not found");
+});
+
+app.delete("/api/shoes/:id", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { id } = req.params;
+  try {
+    await Shoes.findByIdAndDelete(id);
+    res.status(200).json({ message: "Shoe deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete shoe", error });
+  }
 });
 
 app.listen(4000);
