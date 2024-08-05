@@ -84,7 +84,8 @@ export default function ShoeForm() {
   async function deleteShoe() {
     if (id) {
       try {
-        await axios.delete(`/api/shoes/${id}`);
+        console.log({ id });
+        await axios.delete(`/shoes/${id}`);
         setRedirect('/account');
       } catch (error) {
         console.error("Failed to delete shoe:", error);
